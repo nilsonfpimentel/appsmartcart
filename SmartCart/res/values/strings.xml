@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">SmartCart</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="signin_insert_account_name">Nome</string>
+    <string name="signin_insert_password">Senha</string>
+    <string name="signin_ok_button_label">Entrar</string>
+    <string name="signin_clickable_signup_text">Criar uma conta</string>
+
+    <string name="signup_insert_account_name">Crie um nome para sua conta</string>
+    <string name="signup_insert_password">Sua senha</string>
+    <string name="signup_insert_conf_password">Confirme sua senha</string>
+    <string name="signup_insert_first_name">Seu nome</string>
+    <string name="signup_insert_last_name">Seu sobrenome</string>
+    <string name="signup_check_avaliability_button">Verificar disponibilidade</string>
+    <string name="signup_terms_checkbox">Lí e concordo com os termos</string>
+    <string name="signup_create_account_button">Criar minha conta</string>
+
+    <string name="main_welcome_user_text">Bem vindo %1s</string>
+
+</resources>
