@@ -1,25 +1,24 @@
 package com.smartcart.cliente.estruturas;
 
-import com.smartcart.cliente.estruturas.ContaUsuario;
-
 public class Cliente {
-	private int id;
+	private long id;
 	private String primeiroNome;
 	private String ultimoNome;
-	//private ContaUsuario conta;
 	private String contaNome;
 	private String contaSenha;
 	
-//	public Cliente(int id, String primeiroNome, String ultimoNome,
-//			ContaUsuario conta) {
-//		
-//		this.setId(id);
-//		this.setPrimeiroNome(primeiroNome);
-//		this.setUltimoNome(ultimoNome);
-//		this.setConta(conta);
-//	}
+	public Cliente() {}
 	
-	public Cliente(int id, String primeiroNome, String ultimoNome,
+	public Cliente(String primeiroNome, String ultimoNome,
+			String contaNome, String contaSenha) {
+		
+		this.setPrimeiroNome(primeiroNome);
+		this.setUltimoNome(ultimoNome);
+		this.setContaNome(contaNome);
+		this.setContaSenha(contaSenha);
+	}
+	
+	public Cliente(long id, String primeiroNome, String ultimoNome,
 			String contaNome, String contaSenha) {
 		
 		this.setId(id);
@@ -29,12 +28,15 @@ public class Cliente {
 		this.setContaSenha(contaSenha);
 	}
 	
-	public int getId() { return id; }
-	public String getPrimeiroNome() { return primeiroNome; }
-	public String getUltimoNome() { return ultimoNome; }
-	//public ContaUsuario getConta() { return conta; }
+	//getters
+	public long getId() { return id; }
+	public String getPrimeiroNome() { return this.primeiroNome; }
+	public String getUltimoNome() { return this.ultimoNome; }
+	public String getContaNome() { return this.contaNome; }
+	public String getContaSenha() { return this.contaSenha; }
 	
-	public void setId(int id) {
+	//setters
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -45,26 +47,12 @@ public class Cliente {
 	public void setUltimoNome(String ultimoNome) {
 		this.ultimoNome = ultimoNome;
 	}
-
-	//contaNome
-	public String getContaNome() {
-		return contaNome;
-	}
-	//contaNome
+	
 	public void setContaNome(String contaNome) {
 		this.contaNome = contaNome;
 	}
-
-	//contaSenha
-	public String getContaSenha() {
-		return contaSenha;
-	}
-	//contaSenha
+	
 	public void setContaSenha(String contaSenha) {
 		this.contaSenha = contaSenha;
 	}
-
-//	public void setConta(ContaUsuario conta) {
-//		this.conta = conta;
-//	}
 }

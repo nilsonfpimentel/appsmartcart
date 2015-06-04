@@ -1,5 +1,8 @@
 package com.smartcart.cliente.persistencia;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.smartcart.cliente.estruturas.Cliente;
 
 import android.content.ContentValues;
@@ -10,62 +13,155 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class ClienteDAO {
 	private SQLiteDatabase database;
+	private ClienteDBHelper clienteDBHelper;
 	
-	private final String TABLE_NAME = ClienteDBHelper.TABLE_NAME;
-	
-	private final String ID = ClienteDBHelper.KEY_ID;
-	private final String FIRST_NAME = ClienteDBHelper.KEY_FST_NOME;
-	private final String LAST_NAME = ClienteDBHelper.KEY_LST_NOME;
-	private final String ACC_NAME = ClienteDBHelper.KEY_ACC_NOME;
-	private final String ACC_SENHA = ClienteDBHelper.KEY_ACC_PSW;
-	
-	private String columns[] = { ClienteDBHelper.KEY_ID,
+	private String colunas[] = { ClienteDBHelper.KEY_ID,
 			ClienteDBHelper.KEY_FST_NOME, ClienteDBHelper.KEY_LST_NOME,
 			ClienteDBHelper.KEY_ACC_NOME, ClienteDBHelper.KEY_ACC_PSW };
-	
-	private ClienteDBHelper clienteDBHelper;
 	
 	public ClienteDAO(Context context) {
 		clienteDBHelper = new ClienteDBHelper(context);
 	}
 	
+	
 	public void open() throws SQLException {
 		database = clienteDBHelper.getWritableDatabase();
+	}
+	
+	public void openReadable() throws SQLException {
+		database = clienteDBHelper.getReadableDatabase();
 	}
 	
 	public void close() {
 		clienteDBHelper.close();
 	}
 	
-	public void incluirCliente(Cliente cliente) {
-		database = clienteDBHelper.getWritableDatabase();
+	private Cliente recuperarClienteEmCursor(Cursor cursor) {
+		long id = Long.parseLong(cursor.getString(0));
+		String primeiroNome = cursor.getString(1);
+		String ultimoNome = cursor.getString(2);
+		String contaNome = cursor.getString(3);
+		String contaSenha = cursor.getString(4);
 		
+		Cliente cliente = new Cliente(id, primeiroNome, ultimoNome, contaNome,
+				contaSenha);
+		
+		return cliente;
+	}
+	
+	private ContentValues inserirEmContentValues(Cliente cliente) {
 		ContentValues values = new ContentValues();
-		values.put(ID, cliente.getId());
-		values.put(FIRST_NAME, cliente.getPrimeiroNome());
-		values.put(LAST_NAME, cliente.getUltimoNome());
-		values.put(ACC_NAME, cliente.getContaNome());
-		values.put(ACC_SENHA, cliente.getContaSenha());
 		
-		database.insert(TABLE_NAME, null, values);
+		values.put(ClienteDBHelper.KEY_FST_NOME, cliente.getPrimeiroNome());
+		values.put(ClienteDBHelper.KEY_LST_NOME, cliente.getUltimoNome());
+		values.put(ClienteDBHelper.KEY_ACC_NOME, cliente.getContaNome());
+		values.put(ClienteDBHelper.KEY_ACC_PSW, cliente.getContaSenha());
+		
+		return values;
+	}
+	
+	public boolean verificarNomeDeConta(String nomeConta) {
+		this.openReadable();
+		
+		String selecao = ClienteDBHelper.KEY_ACC_NOME + " = ?";
+		String selecaoArgs[] = new String[] { nomeConta };
+		
+		Cursor cursor = database.query(ClienteDBHelper.TABLE_NAME, colunas,
+				selecao, selecaoArgs, null, null, null, null);
+		
+		if (cursor.moveToFirst()) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public Cliente verificarDadosLogin(Cliente clienteConsulta) {
+		this.open();
+		
+		String contaNome = clienteConsulta.getContaNome();
+		String contaSenha = clienteConsulta.getContaSenha();
+		
+		String selecaoArgs[] = new String[] {contaNome, contaSenha};
+		
+		String selecao = ClienteDBHelper.KEY_ACC_NOME + " = ? AND "
+				+ClienteDBHelper.KEY_ACC_PSW + " = ?";
+		
+		Cursor cursor = database.query(ClienteDBHelper.TABLE_NAME, colunas,
+				selecao, selecaoArgs, null, null, null, null);
+		
+		if(cursor.moveToFirst()) {
+			return this.recuperarClienteEmCursor(cursor);
+		}
+		
+		return null;
+	}
+	
+	public void incluirCliente(Cliente cliente) {
+		this.open();
+		
+		ContentValues values = this.inserirEmContentValues(cliente);
+		database.insert(ClienteDBHelper.TABLE_NAME, null, values);
 		database.close();
 	}
 	
-	public Cliente recuperarCliente(int id) {
-		database = clienteDBHelper.getReadableDatabase();
+	public Cliente recuperarCliente(long id) {
+		this.openReadable();
 		
-		Cursor cursor = database.query(TABLE_NAME, new String[] { ID,
-	            FIRST_NAME, LAST_NAME, ACC_NAME, ACC_SENHA }, ID + "=?",
-	            new String[] { String.valueOf(id) }, null, null, null, null);
+		Cursor cursor = database.query(ClienteDBHelper.TABLE_NAME, colunas,
+				ClienteDBHelper.KEY_ID + "=?",
+				new String[] { String.valueOf(id) }, null, null, null, null);
 		
-		if (cursor != null) {
-			cursor.moveToFirst();
+		if (cursor.moveToFirst()) {
+			Cliente cliente = this.recuperarClienteEmCursor(cursor);
+			return cliente;
 		}
 		
-		Cliente cliente = new Cliente(Integer.parseInt(cursor.getString(0)),
-				cursor.getString(1), cursor.getString(2), cursor.getString(3),
-				cursor.getString(4));
+		return null;
+	}
+	
+	public List<Cliente> recuperarTodosClientes() {
+		this.openReadable();
 		
-		return cliente;
+		List<Cliente> listaClientes = new ArrayList<Cliente>();
+		
+		String selectQuery = "SELECT * FROM " + ClienteDBHelper.TABLE_NAME;
+		Cursor cursor = database.rawQuery(selectQuery, null);
+		
+		if (cursor.moveToFirst()) {
+			do{
+				Cliente cliente = this.recuperarClienteEmCursor(cursor);
+				listaClientes.add(cliente);
+			} while (cursor.moveToNext());
+		}
+		
+		return listaClientes;
+	}
+	
+	public int atualizarCliente(Cliente cliente) {
+		this.open();
+		
+		ContentValues values = this.inserirEmContentValues(cliente);
+		
+		return database.update(ClienteDBHelper.TABLE_NAME, values,
+				ClienteDBHelper.KEY_ID + " = ?",
+				new String[] { String.valueOf(cliente.getId()) });
+	}
+	
+	public void removerCliente(Cliente cliente) {
+		this.open();
+		
+		database.delete(ClienteDBHelper.TABLE_NAME,
+				ClienteDBHelper.KEY_ID + " = ?",
+				new String[] { String.valueOf(cliente.getId()) });
+		
+		database.close();
+	}
+	
+	public int recuperarNumeroDeClientes() {
+		this.openReadable();
+		String contagemQuery = "SELECT * FROM " + ClienteDBHelper.TABLE_NAME;
+		Cursor cursor = database.rawQuery(contagemQuery, null);
+		return cursor.getCount();
 	}
 }

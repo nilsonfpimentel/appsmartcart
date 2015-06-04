@@ -7,12 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ClienteDBHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "Clientes.db";
 	private static final int DATABASE_VERSION = 1;
+	
 	public static final String TABLE_NAME = "clientes";
 	
 	public static final String KEY_ID = "id";
 	public static final String KEY_FST_NOME = "primeiro_nome";
 	public static final String KEY_LST_NOME = "ultimo_nome";
-	public static final String KEY_ACC_NOME = "cont_nome";
+	public static final String KEY_ACC_NOME = "conta_nome";
 	public static final String KEY_ACC_PSW = "conta_senha";
 	
 	public ClienteDBHelper(Context context){
@@ -23,9 +24,13 @@ public class ClienteDBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		final String CREATE_STATEMENT = "CREATE TABLE "
 				+ TABLE_NAME + "(" + KEY_ID
-				+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ KEY_FST_NOME + " TEXT " + KEY_LST_NOME + " TEXT "
-				+ KEY_ACC_NOME + " TEXT " + KEY_ACC_PSW + " TEXT);";
+				+ " INTEGER PRIMARY KEY, "
+				+ KEY_FST_NOME + " TEXT, " + KEY_LST_NOME + " TEXT, "
+				+ KEY_ACC_NOME + " TEXT, " + KEY_ACC_PSW + " TEXT);";
+		
+//		final String CREATE_STATEMENT = "CREATE TABLE "
+//				+ TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY, "
+//				+ KEY_FST_NOME + " TEXT, " + KEY_LST_NOME + " TEXT);";
 		
 		db.execSQL(CREATE_STATEMENT);
 	}
