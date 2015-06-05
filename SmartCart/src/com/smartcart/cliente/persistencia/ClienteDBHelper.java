@@ -13,8 +13,8 @@ public class ClienteDBHelper extends SQLiteOpenHelper {
 	public static final String KEY_ID = "id";
 	public static final String KEY_FST_NOME = "primeiro_nome";
 	public static final String KEY_LST_NOME = "ultimo_nome";
-	public static final String KEY_ACC_NOME = "conta_nome";
-	public static final String KEY_ACC_PSW = "conta_senha";
+	public static final String KEY_EMAIL = "email";
+	public static final String KEY_SENHA = "senha";
 	
 	public ClienteDBHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,11 +26,7 @@ public class ClienteDBHelper extends SQLiteOpenHelper {
 				+ TABLE_NAME + "(" + KEY_ID
 				+ " INTEGER PRIMARY KEY, "
 				+ KEY_FST_NOME + " TEXT, " + KEY_LST_NOME + " TEXT, "
-				+ KEY_ACC_NOME + " TEXT, " + KEY_ACC_PSW + " TEXT);";
-		
-//		final String CREATE_STATEMENT = "CREATE TABLE "
-//				+ TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY, "
-//				+ KEY_FST_NOME + " TEXT, " + KEY_LST_NOME + " TEXT);";
+				+ KEY_EMAIL + " TEXT, " + KEY_SENHA + " TEXT);";
 		
 		db.execSQL(CREATE_STATEMENT);
 	}

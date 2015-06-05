@@ -1,11 +1,14 @@
 package com.smartcart.activities;
 
 import com.smartcart.R;
-import com.smartcart.R.id;
-import com.smartcart.R.layout;
-import com.smartcart.R.menu;
+import com.smartcart.cliente.estruturas.Cliente;
+import com.smartcart.cliente.funcionalidades.UsuarioServicos;
+import com.smartcart.cliente.persistencia.ClienteDAO;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,16 +20,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class SigninActivity extends Activity {
-
+	//private ClienteDAO clienteDB;
+	
+	final Context context = this;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_signin);
 		
-		final EditText accountNameEditText = (EditText) findViewById(
-				R.id.signin_account_name_input);
+		UsuarioServicos.setDao( new ClienteDAO(this) );
+		UsuarioServicos.openDao();
 		
-		final EditText passwordEditText = (EditText) findViewById(
+		final EditText emailEditText = (EditText) findViewById(
+				R.id.signin_email_input);
+		
+		final EditText senhaEditText = (EditText) findViewById(
 				R.id.signin_password_input);
 		
 		//Logar conta -> clicar botão "Entrar"
@@ -35,18 +44,36 @@ public class SigninActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				String accountName = accountNameEditText.getEditableText()
-						.toString();
 				
-				String password = passwordEditText.getEditableText().toString();
+				String email = emailEditText.getEditableText().toString();
+				String senha = senhaEditText.getEditableText().toString();
 				
-				Intent intentSignin = new Intent(SigninActivity.this,
-						MainActivity.class);
+				UsuarioServicos.openDao();
+				Cliente cliente = UsuarioServicos.logarConta(email, senha);
 				
-				intentSignin.putExtra("accountName", accountName);
-				intentSignin.putExtra("password", password);
-				
-				startActivity(intentSignin);
+				if (cliente == null){
+					AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+					alertDialog.setTitle("E-mail ou senha incorretos");
+					alertDialog.setMessage("Verifique os dados de sua conta");
+					alertDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							// here you can add functions
+						}
+					});
+					
+					alertDialog.setIcon(R.drawable.ic_launcher);
+					alertDialog.show();
+				}
+				else{
+					Intent intentMain = new Intent(SigninActivity.this,
+							MainActivity.class);
+					
+					intentMain.putExtra("email", cliente.getPrimeiroNome());
+					intentMain.putExtra("senha", senha);
+					
+					startActivity(intentMain);
+					finish();
+				}
 			}
 		});
 		
@@ -59,9 +86,20 @@ public class SigninActivity extends Activity {
 			public void onClick(View v) {
 				Intent intentSignup = new Intent(SigninActivity.this,
 						SignupActivity.class);
+				
 				startActivity(intentSignup);
 			}
 		});
+	}
+	
+	public void onResume() {
+		UsuarioServicos.closeDAO();
+		super.onResume();
+	}
+	
+	public void onPause() {
+		UsuarioServicos.closeDAO();
+		super.onPause();
 	}
 
 	@Override
@@ -83,4 +121,3 @@ public class SigninActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 }
-

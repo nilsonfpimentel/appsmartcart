@@ -17,7 +17,7 @@ public class ClienteDAO {
 	
 	private String colunas[] = { ClienteDBHelper.KEY_ID,
 			ClienteDBHelper.KEY_FST_NOME, ClienteDBHelper.KEY_LST_NOME,
-			ClienteDBHelper.KEY_ACC_NOME, ClienteDBHelper.KEY_ACC_PSW };
+			ClienteDBHelper.KEY_EMAIL, ClienteDBHelper.KEY_SENHA };
 	
 	public ClienteDAO(Context context) {
 		clienteDBHelper = new ClienteDBHelper(context);
@@ -40,11 +40,11 @@ public class ClienteDAO {
 		long id = Long.parseLong(cursor.getString(0));
 		String primeiroNome = cursor.getString(1);
 		String ultimoNome = cursor.getString(2);
-		String contaNome = cursor.getString(3);
-		String contaSenha = cursor.getString(4);
+		String email = cursor.getString(3);
+		String senha = cursor.getString(4);
 		
-		Cliente cliente = new Cliente(id, primeiroNome, ultimoNome, contaNome,
-				contaSenha);
+		Cliente cliente = new Cliente(id, primeiroNome, ultimoNome, email,
+				senha);
 		
 		return cliente;
 	}
@@ -54,17 +54,17 @@ public class ClienteDAO {
 		
 		values.put(ClienteDBHelper.KEY_FST_NOME, cliente.getPrimeiroNome());
 		values.put(ClienteDBHelper.KEY_LST_NOME, cliente.getUltimoNome());
-		values.put(ClienteDBHelper.KEY_ACC_NOME, cliente.getContaNome());
-		values.put(ClienteDBHelper.KEY_ACC_PSW, cliente.getContaSenha());
+		values.put(ClienteDBHelper.KEY_EMAIL, cliente.getEmail());
+		values.put(ClienteDBHelper.KEY_SENHA, cliente.getSenha());
 		
 		return values;
 	}
 	
-	public boolean verificarNomeDeConta(String nomeConta) {
+	public boolean verificarEmail(String email) {
 		this.openReadable();
 		
-		String selecao = ClienteDBHelper.KEY_ACC_NOME + " = ?";
-		String selecaoArgs[] = new String[] { nomeConta };
+		String selecao = ClienteDBHelper.KEY_EMAIL + " = ?";
+		String selecaoArgs[] = new String[] { email };
 		
 		Cursor cursor = database.query(ClienteDBHelper.TABLE_NAME, colunas,
 				selecao, selecaoArgs, null, null, null, null);
@@ -76,16 +76,13 @@ public class ClienteDAO {
 		return false;
 	}
 	
-	public Cliente verificarDadosLogin(Cliente clienteConsulta) {
+	public Cliente verificarDadosLogin(String email, String senha) {
 		this.open();
 		
-		String contaNome = clienteConsulta.getContaNome();
-		String contaSenha = clienteConsulta.getContaSenha();
+		String selecaoArgs[] = new String[] {email, senha};
 		
-		String selecaoArgs[] = new String[] {contaNome, contaSenha};
-		
-		String selecao = ClienteDBHelper.KEY_ACC_NOME + " = ? AND "
-				+ClienteDBHelper.KEY_ACC_PSW + " = ?";
+		String selecao = ClienteDBHelper.KEY_EMAIL + " = ? AND "
+				+ClienteDBHelper.KEY_SENHA + " = ?";
 		
 		Cursor cursor = database.query(ClienteDBHelper.TABLE_NAME, colunas,
 				selecao, selecaoArgs, null, null, null, null);
@@ -100,9 +97,11 @@ public class ClienteDAO {
 	public void incluirCliente(Cliente cliente) {
 		this.open();
 		
-		ContentValues values = this.inserirEmContentValues(cliente);
-		database.insert(ClienteDBHelper.TABLE_NAME, null, values);
-		database.close();
+		if (this.verificarEmail(cliente.getEmail()) == false) {
+			ContentValues values = this.inserirEmContentValues(cliente);
+			database.insert(ClienteDBHelper.TABLE_NAME, null, values);
+			database.close();
+		}
 	}
 	
 	public Cliente recuperarCliente(long id) {

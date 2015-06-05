@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.smartcart.activities.SignunActivity" >
 
     <TextView
@@ -48,29 +50,45 @@
         android:layout_below="@+id/signup_last_name_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <EditText
-        android:id="@+id/signup_account_name_input"
+    
+    <TextView
+        android:id="@+id/signup_email_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="none"
+        android:layout_alignStart="@+id/signup_email_input"
+        android:layout_alignLeft="@+id/signup_email_input"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/signup_last_name_input"
+        android:layout_marginTop="24dp"
+        android:text="@string/signup_insert_email"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <EditText
+        android:id="@+id/signup_email_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
         android:maxLength="@integer/edit_text_max_lenght"
-        android:layout_below="@+id/signup_account_name_label"
+        android:layout_below="@+id/signup_email_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
+	
     <TextView
-        android:id="@+id/signup_clickable_check_avaliability"
+        android:id="@+id/signup_password_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/signup_check_avaliability_button"
-        android:layout_below="@+id/signup_account_name_input"
+        android:layout_alignLeft="@+id/signup_password_input"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
+        android:layout_alignParentStart="true"
+        android:layout_alignStart="@+id/signup_password_input"
+        android:layout_below="@+id/signup_email_input"
+        android:layout_marginTop="28dp"
+        android:text="@string/signup_insert_password"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
     <EditText
         android:id="@+id/signup_password_input"
         android:layout_width="match_parent"
@@ -81,28 +99,7 @@
         android:layout_below="@+id/signup_password_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-
-    <TextView
-        android:id="@+id/signup_conf_password_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/signup_insert_conf_password"
-        android:layout_below="@+id/signup_password_input"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:id="@+id/signup_conf_password_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:maxLength="@integer/edit_text_max_lenght"
-        android:ems="10"
-        android:layout_below="@+id/signup_conf_password_label"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
+    
     <Button
         android:id="@+id/signup_clickable_create_account_button"
         android:layout_width="wrap_content"
@@ -110,31 +107,5 @@
         android:text="@string/signup_create_account_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/signup_password_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/signup_password_input"
-        android:layout_alignLeft="@+id/signup_password_input"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/signup_clickable_check_avaliability"
-        android:layout_marginTop="28dp"
-        android:text="@string/signup_insert_password"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/signup_account_name_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/signup_account_name_input"
-        android:layout_alignLeft="@+id/signup_account_name_input"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/signup_last_name_input"
-        android:layout_marginTop="24dp"
-        android:text="@string/signup_insert_account_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

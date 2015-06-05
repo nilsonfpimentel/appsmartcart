@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,22 +10,22 @@
     tools:context="com.smartcart.activities.SigninActivity" >
 
     <TextView
-        android:id="@+id/signin_account_name_label"
+        android:id="@+id/signin_email_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/signin_insert_account_name"
+        android:text="@string/signin_insert_email"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/signin_account_name_input"
+        android:id="@+id/signin_email_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="none"
+        android:inputType="textEmailAddress"
         android:maxLength="@integer/edit_text_max_lenght"
-        android:layout_below="@+id/signin_account_name_label"
+        android:layout_below="@+id/signin_email_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -34,7 +35,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/signin_insert_password"
-        android:layout_below="@+id/signin_account_name_input"
+        android:layout_below="@+id/signin_email_input"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="49dp" />
