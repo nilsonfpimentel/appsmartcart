@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package com.smartcart.activities;
 
 import com.smartcart.R;
@@ -6,49 +9,38 @@ import com.smartcart.cliente.funcionalidades.UsuarioServicos;
 import com.smartcart.cliente.persistencia.ClienteDAO;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class SignupActivity extends Activity {
-	final Context context = this;
+/**
+ * @author PLACEHOLDER
+ *
+ */
+public class UpdateActivity extends Activity {
 	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_signup);
+		setContentView(R.layout.activity_update);
 		
-		/**
-		 * AlertDialog genérico para activity criar conta
-		 */
-		final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-		alertDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {}
-		});
-		alertDialog.setIcon(R.drawable.ic_launcher);
-		alertDialog.setTitle("Falha na criação de nova conta");
-		
-//		UsuarioServicos.setDao( new ClienteDAO(this) );
+		UsuarioServicos.openDao();
 		
 		final EditText primeiroNomeInput = (EditText) findViewById(
-				R.id.signup_first_name_input);
+				R.id.update_first_name_input);
 		
 		final EditText ultimoNomeInput = (EditText) findViewById(
-				R.id.signup_last_name_input);
+				R.id.update_last_name_input);
 		
 		final EditText emailInput = (EditText) findViewById(
-				R.id.signup_email_input);
+				R.id.update_email_input);
 		
 		final EditText senhaInput = (EditText) findViewById(
-				R.id.signup_password_input);
+				R.id.update_password_input);
 		
 		Button signupOkButton = (Button) findViewById(
-				R.id.signup_clickable_create_account_button);
+				R.id.update_clickable_create_account_button);
 		
 		signupOkButton.setOnClickListener(new OnClickListener() {
 			
@@ -61,18 +53,8 @@ public class SignupActivity extends Activity {
 				
 				Cliente cliente = preencheCampos(primeiroNome, ultimoNome, email, senha);
 				
-				if (UsuarioServicos.verificaValidadeCampos(cliente) == -1) {
-					alertDialog.setMessage("Todos os campos devem ser preenchidos.");
-					alertDialog.show();
-				}
-				else if(UsuarioServicos.checaEmailCadastrado(email)) {
-					alertDialog.setMessage("Conta de E-mail já cadastrada.");
-					alertDialog.show();
-				}
-				else {
-					UsuarioServicos.cadastrarCliente(cliente);
-					finish();
-				}
+				UsuarioServicos.atualizarDados(cliente);
+				finish();
 			}
 		});
 	}

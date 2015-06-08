@@ -1,7 +1,6 @@
 package com.smartcart.activities;
 
 import com.smartcart.R;
-import com.smartcart.cliente.estruturas.Cliente;
 import com.smartcart.cliente.funcionalidades.UsuarioServicos;
 import com.smartcart.cliente.persistencia.ClienteDAO;
 
@@ -20,8 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class SigninActivity extends Activity {
-	//private ClienteDAO clienteDB;
-	
 	final Context context = this;
 	
 	@Override
@@ -48,17 +45,14 @@ public class SigninActivity extends Activity {
 				String email = emailEditText.getEditableText().toString();
 				String senha = senhaEditText.getEditableText().toString();
 				
-				UsuarioServicos.openDao();
-				Cliente cliente = UsuarioServicos.logarConta(email, senha);
+				boolean loginFlag = UsuarioServicos.login(email, senha);
 				
-				if (cliente == null){
+				if (loginFlag == false){
 					AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 					alertDialog.setTitle("E-mail ou senha incorretos");
 					alertDialog.setMessage("Verifique os dados de sua conta");
 					alertDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {
-							// here you can add functions
-						}
+						public void onClick(DialogInterface dialog, int which) {}
 					});
 					
 					alertDialog.setIcon(R.drawable.ic_launcher);
@@ -68,8 +62,7 @@ public class SigninActivity extends Activity {
 					Intent intentMain = new Intent(SigninActivity.this,
 							MainActivity.class);
 					
-					intentMain.putExtra("email", cliente.getPrimeiroNome());
-					intentMain.putExtra("senha", senha);
+//					intentMain.putExtra("email", cliente.getPrimeiroNome());
 					
 					startActivity(intentMain);
 					finish();
@@ -93,7 +86,8 @@ public class SigninActivity extends Activity {
 	}
 	
 	public void onResume() {
-		UsuarioServicos.closeDAO();
+		UsuarioServicos.setDao(new ClienteDAO(this));
+		UsuarioServicos.openDao();
 		super.onResume();
 	}
 	

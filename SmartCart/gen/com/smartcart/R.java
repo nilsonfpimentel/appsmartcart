@@ -25,24 +25,35 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f090011;
-        public static final int main_dummy_signup_button=0x7f090001;
+        public static final int action_settings=0x7f09001c;
+        public static final int main_logout_button=0x7f090002;
+        public static final int main_update_client_button=0x7f090001;
         public static final int main_welcome_user_label=0x7f090000;
-        public static final int signin_clickable_signup=0x7f090007;
-        public static final int signin_email_input=0x7f090003;
-        public static final int signin_email_label=0x7f090002;
-        public static final int signin_ok_button=0x7f090006;
-        public static final int signin_password_input=0x7f090005;
-        public static final int signin_password_label=0x7f090004;
-        public static final int signup_clickable_create_account_button=0x7f090010;
-        public static final int signup_email_input=0x7f09000d;
-        public static final int signup_email_label=0x7f09000c;
-        public static final int signup_first_name_input=0x7f090009;
-        public static final int signup_first_name_label=0x7f090008;
-        public static final int signup_last_name_input=0x7f09000b;
-        public static final int signup_last_name_label=0x7f09000a;
-        public static final int signup_password_input=0x7f09000f;
-        public static final int signup_password_label=0x7f09000e;
+        public static final int signin_clickable_signup=0x7f090008;
+        public static final int signin_email_input=0x7f090004;
+        public static final int signin_email_label=0x7f090003;
+        public static final int signin_ok_button=0x7f090007;
+        public static final int signin_password_input=0x7f090006;
+        public static final int signin_password_label=0x7f090005;
+        public static final int signup_clickable_create_account_button=0x7f090011;
+        public static final int signup_email_input=0x7f09000e;
+        public static final int signup_email_label=0x7f09000d;
+        public static final int signup_first_name_input=0x7f09000a;
+        public static final int signup_first_name_label=0x7f090009;
+        public static final int signup_last_name_input=0x7f09000c;
+        public static final int signup_last_name_label=0x7f09000b;
+        public static final int signup_password_input=0x7f090010;
+        public static final int signup_password_label=0x7f09000f;
+        public static final int update_clickable_create_account_button=0x7f09001b;
+        public static final int update_email_input=0x7f090018;
+        public static final int update_email_label=0x7f090017;
+        public static final int update_first_name_input=0x7f090014;
+        public static final int update_first_name_label=0x7f090013;
+        public static final int update_last_name_input=0x7f090016;
+        public static final int update_last_name_label=0x7f090015;
+        public static final int update_password_input=0x7f09001a;
+        public static final int update_password_label=0x7f090019;
+        public static final int update_top_disclaimer_label=0x7f090012;
     }
     public static final class integer {
         public static final int edit_text_max_lenght=0x7f050000;
@@ -51,27 +62,38 @@ public final class R {
         public static final int activity_main=0x7f030000;
         public static final int activity_signin=0x7f030001;
         public static final int activity_signup=0x7f030002;
+        public static final int activity_update=0x7f030003;
     }
     public static final class menu {
         public static final int signin=0x7f080000;
     }
     public static final class string {
         public static final int action_settings=0x7f060002;
+        public static final int activity_name_main=0x7f060005;
+        public static final int activity_name_signin=0x7f060003;
+        public static final int activity_name_signup=0x7f060004;
+        public static final int activity_name_update=0x7f060006;
         public static final int app_name=0x7f060000;
         public static final int hello_world=0x7f060001;
-        public static final int main_dummy_signup_button=0x7f06000f;
-        public static final int main_welcome_user_text=0x7f06000e;
-        public static final int signin_clickable_signup_text=0x7f060006;
-        public static final int signin_insert_email=0x7f060003;
-        public static final int signin_insert_password=0x7f060004;
-        public static final int signin_login_fail=0x7f060007;
-        public static final int signin_ok_button_label=0x7f060005;
-        public static final int signup_create_account_button=0x7f06000d;
-        public static final int signup_insert_conf_password=0x7f06000a;
-        public static final int signup_insert_email=0x7f060008;
-        public static final int signup_insert_first_name=0x7f06000b;
-        public static final int signup_insert_last_name=0x7f06000c;
-        public static final int signup_insert_password=0x7f060009;
+        public static final int main_logout_button_label=0x7f060013;
+        public static final int main_update_client_button=0x7f060012;
+        public static final int main_welcome_user_text=0x7f060011;
+        public static final int signin_clickable_signup_text=0x7f06000a;
+        public static final int signin_insert_email=0x7f060007;
+        public static final int signin_insert_password=0x7f060008;
+        public static final int signin_login_fail=0x7f06000b;
+        public static final int signin_ok_button_label=0x7f060009;
+        public static final int signup_create_account_button=0x7f060010;
+        public static final int signup_insert_email=0x7f06000c;
+        public static final int signup_insert_first_name=0x7f06000e;
+        public static final int signup_insert_last_name=0x7f06000f;
+        public static final int signup_insert_password=0x7f06000d;
+        public static final int update_create_account_button=0x7f060019;
+        public static final int update_disclaimer_text=0x7f060014;
+        public static final int update_insert_email=0x7f060015;
+        public static final int update_insert_first_name=0x7f060017;
+        public static final int update_insert_last_name=0x7f060018;
+        public static final int update_insert_password=0x7f060016;
     }
     public static final class style {
         /** 

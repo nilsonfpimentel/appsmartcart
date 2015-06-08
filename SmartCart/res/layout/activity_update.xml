@@ -7,105 +7,111 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.smartcart.activities.SignupActivity" >
+    tools:context="com.smartcart.activities.UpdateActivity" >
+    
+    <TextView
+        android:id="@+id/update_top_disclaimer_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/update_disclaimer_text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/signup_first_name_label"
+        android:id="@+id/update_first_name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/signup_insert_first_name"
+        android:text="@string/update_insert_first_name"
+        android:layout_below="@+id/update_top_disclaimer_label"
+        android:layout_marginTop="30dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/signup_first_name_input"
+        android:id="@+id/update_first_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:maxLength="@integer/edit_text_max_lenght"
         android:inputType="textPersonName|textCapWords"
         android:ems="10"
-        android:layout_below="@+id/signup_first_name_label"
+        android:layout_below="@+id/update_first_name_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:id="@+id/signup_last_name_label"
+        android:id="@+id/update_last_name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/signup_insert_last_name"
+        android:text="@string/update_insert_last_name"
         android:maxLength="@integer/edit_text_max_lenght"
-        android:layout_below="@+id/signup_first_name_input"
+        android:layout_below="@+id/update_first_name_input"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
-        android:id="@+id/signup_last_name_input"
+        android:id="@+id/update_last_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName|textCapWords"
         android:maxLength="@integer/edit_text_max_lenght"
         android:ems="10"
-        android:layout_below="@+id/signup_last_name_label"
+        android:layout_below="@+id/update_last_name_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
     
     <TextView
-        android:id="@+id/signup_email_label"
+        android:id="@+id/update_email_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/signup_email_input"
-        android:layout_alignLeft="@+id/signup_email_input"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/signup_last_name_input"
+        android:layout_below="@+id/update_last_name_input"
         android:layout_marginTop="24dp"
-        android:text="@string/signup_insert_email"
+        android:text="@string/update_insert_email"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <EditText
-        android:id="@+id/signup_email_input"
+        android:id="@+id/update_email_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:maxLength="@integer/edit_text_max_lenght"
-        android:layout_below="@+id/signup_email_label"
+        android:layout_below="@+id/update_email_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 	
     <TextView
-        android:id="@+id/signup_password_label"
+        android:id="@+id/update_password_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/signup_password_input"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignStart="@+id/signup_password_input"
-        android:layout_below="@+id/signup_email_input"
+        android:layout_below="@+id/update_email_input"
         android:layout_marginTop="28dp"
-        android:text="@string/signup_insert_password"
+        android:text="@string/update_insert_password"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <EditText
-        android:id="@+id/signup_password_input"
+        android:id="@+id/update_password_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:maxLength="@integer/edit_text_max_lenght"
         android:ems="10"
-        android:layout_below="@+id/signup_password_label"
+        android:layout_below="@+id/update_password_label"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
     
     <Button
-        android:id="@+id/signup_clickable_create_account_button"
+        android:id="@+id/update_clickable_create_account_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/signup_create_account_button"
+        android:text="@string/update_create_account_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
+	
 </RelativeLayout>

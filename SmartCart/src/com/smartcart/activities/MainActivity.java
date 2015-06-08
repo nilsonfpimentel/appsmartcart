@@ -1,72 +1,67 @@
 package com.smartcart.activities;
 
-import java.util.List;
-
 import com.smartcart.R;
-//import com.smartcart.R.id;
-//import com.smartcart.R.layout;
-//import com.smartcart.R.menu;
-import com.smartcart.cliente.estruturas.Cliente;
+import com.smartcart.cliente.funcionalidades.UsuarioServicos;
 import com.smartcart.cliente.persistencia.ClienteDAO;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	ClienteDAO clienteDB;
-	
-	Context context = this;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		clienteDB = new ClienteDAO(context);
-		clienteDB.open();
+		Button mainAtualizarButton = (Button) findViewById(R.id.main_update_client_button);
 		
-		Bundle extras = getIntent().getExtras();
-		String accountName = extras.getString("email");
-		
-		TextView accountNameTextView = (TextView) findViewById(
-				R.id.main_welcome_user_label);
-		
-		accountNameTextView.setText(getString(
-				R.string.main_welcome_user_text, accountName));
-		
-		//INICIO_TESTES//
-		Log.d("Qdt de clientes:", Long.toString(
-				clienteDB.recuperarNumeroDeClientes() ));
-		
-		Log.d("clienteDB:", "Cadastrando...");
-		
-		Cliente cliente;
-		for (int i = 1; i <= 10; i++) {
-			String pNome = "p" + i;
-			String uNome = "u" + i;
-			String email = "e" + i;
-			String senha = "s" + i;
+		mainAtualizarButton.setOnClickListener(new OnClickListener() {
 			
-			Log.d("Usuario: ",
-					pNome + " : " + uNome + " : " + email + " : " + senha);
-			
-			cliente = new Cliente(pNome, uNome, email, senha);
-			clienteDB.incluirCliente(cliente);
-		}
+			@Override
+			public void onClick(View v) {
+				Intent intentUpdate = new Intent(MainActivity.this, UpdateActivity.class);
+				startActivity(intentUpdate);
+			}
+		});
 		
-		Log.d("Clientes: ", "Listando...");
+		Button mainLogoutButton = (Button) findViewById(R.id.main_logout_button);
 		
-		List<Cliente> listaClientes = clienteDB.recuperarTodosClientes();
-		String log;
-		for (Cliente cl : listaClientes) {
-			log = cl.getPrimeiroNome() + ":" + cl.getUltimoNome() + ":"
-					+ cl.getEmail() + ":" + cl.getSenha();
+		mainLogoutButton.setOnClickListener(new OnClickListener() {
 			
-			Log.d("Cliente:", log);
-		}
-		//FIM_TESTES//
+			@Override
+			public void onClick(View v) {
+				Intent intentUpdate = new Intent(MainActivity.this, SigninActivity.class);
+				startActivity(intentUpdate);
+				
+				UsuarioServicos.imprimeTodos();
+				UsuarioServicos.logout();
+				finish();
+			}
+		});
+		
+	}
+	
+	public void onResume() {
+		UsuarioServicos.setDao(new ClienteDAO(this));
+		UsuarioServicos.openDao();
+		
+		String accountName = UsuarioServicos.recuperarPrimeiroNome();
+		
+		TextView accountNameTextView = (TextView) findViewById(R.id.main_welcome_user_label);
+		
+		accountNameTextView.setText(getString(R.string.main_welcome_user_text, accountName));
+		
+		super.onResume();
+	}
+	
+	public void onPause() {
+		UsuarioServicos.closeDAO();
+		super.onPause();
 	}
 }
