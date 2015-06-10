@@ -2,6 +2,7 @@ package com.smartcart.cliente.funcionalidades;
 
 import java.util.List;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.smartcart.cliente.estruturas.Cliente;
@@ -14,62 +15,36 @@ import com.smartcart.cliente.persistencia.ClienteDAO;
 public abstract class UsuarioServicos {
 	
 	/**
-	 * 
+	 * Objeto responsável pela manipulação do banco de dados.
 	 */
 	private static ClienteDAO clienteDao;
 	
 	/**
-	 * 
+	 * Instância do cliente atualmente logado.
 	 */
 	private static Cliente clienteLogado;
 	
 	/**
+	 * Método interno da classe de serviços de usuário para setar o objeto referente ao cliente
+	 * para ser logado.
+	 * 
 	 * @param cliente
 	 */
-	public static void setClienteLogado(Cliente cliente) { clienteLogado = cliente; }
+	private static void setClienteLogado(Cliente cliente) { clienteLogado = cliente; }
 	
 	/**
-	 * @return
-	 */
-	public static Cliente getClienteLogado() { return clienteLogado; }
-	
-	/**
-	 * @param dao
-	 */
-	public static void setDao(ClienteDAO dao) {
-		clienteDao = dao;
-	}
-	
-	/**
+	 * Ajusta o contexto do banco de dados para o da atual activity em primeiro plano.
 	 * 
+	 * @param context
 	 */
-	public static void openDao() {
-		clienteDao.open();
+	public static void setDatabaseContext(Context context) {
+		clienteDao = new ClienteDAO(context);
 	}
 	
 	/**
-	 * 
-	 */
-	public static void closeDAO() {
-		clienteDao.close();
-	}
-	
-	/**
-	 * @param email
-	 * @param senha
-	 * @return
-	 */
-	public static Cliente logarConta(String email, String senha) {
-		Cliente clienteTemp = clienteDao.verificarDadosLogin(email, senha);
-		
-		if (clienteTemp != null) {
-			setClienteLogado(clienteTemp);
-		}
-		
-		return clienteTemp;
-	}
-	
-	/**
+	 * Recupera do banco de dados o cliente registrado com o e-mail e senha fornecidos, armaze-
+	 * na tal cliente no atributo clienteLogado e retorna um booleano como resposta caso o log-
+	 * in foi bem-sucedido ou não.
 	 * 
 	 * @param email
 	 * @param senha
@@ -87,27 +62,20 @@ public abstract class UsuarioServicos {
 	}
 	
 	/**
-	 * 
+	 * Seta o cliente logado como null, utilizado como funcionalidade de logoff.
 	 */
-	public static void logout() {
+	public static void resetLogin() {
 		setClienteLogado(null);
 	}
 	
 	/**
+	 * Recupera o atributo primeiroNome do cliente logado para funcionalidades como mensagem de
+	 * boas-vindas.
 	 * 
 	 * @return
 	 */
 	public static String recuperarPrimeiroNome() {
 		return clienteLogado.getPrimeiroNome();
-	}
-	
-	/**
-	 * @param dao
-	 * @param email
-	 * @return
-	 */
-	public static boolean verificarDisponibilidadeEmail(ClienteDAO dao, String email) {
-		return dao.verificarEmail(email); 
 	}
 	
 	/**
@@ -119,6 +87,8 @@ public abstract class UsuarioServicos {
 	}
 	
 	/**
+	 * Cadastra o cliente recebido como argumento no banco de dados.
+	 * 
 	 * @param cliente
 	 */
 	public static void cadastrarCliente(Cliente cliente) {
@@ -126,87 +96,65 @@ public abstract class UsuarioServicos {
 	}
 	
 	/**
+	 * Atualiza os atributos do cliente atuamente logado com base nos atributos não-vazios do
+	 * cliente passado como argumento.
 	 * 
 	 * @param cliente
 	 */
-	private static void insereAtributosAusentes(Cliente cliente) {
+	private static void atualizaAtributos(Cliente cliente) {
 		
-		if (cliente.getPrimeiroNome().length() <= 0) {
-			cliente.setPrimeiroNome(clienteLogado.getPrimeiroNome());
-			Log.d("UsrServ: insereAtt", "primeiroNome >> Ausente");
+		if (cliente.getPrimeiroNome().length() > 0) {
+			clienteLogado.setPrimeiroNome(cliente.getPrimeiroNome());
+			Log.d("UsrServ: insereAtt", "primeiroNome >> Alterado");
 		}
 		
-		if (cliente.getUltimoNome().length() <= 0) {
-			cliente.setUltimoNome(clienteLogado.getUltimoNome());
-			Log.d("UsrServ: insereAtt", "sobreNome >> Ausente");
+		if (cliente.getUltimoNome().length() > 0) {
+			clienteLogado.setUltimoNome(cliente.getUltimoNome());
+			Log.d("UsrServ: insereAtt", "sobreNome >> Alterado");
 		}
 		
-		if (cliente.getEmail().length() <= 0) {
-			cliente.setEmail(clienteLogado.getEmail());
-			Log.d("UsrServ: insereAtt", "email >> Ausente");
+		if (cliente.getEmail().length() > 0) {
+			clienteLogado.setEmail(cliente.getEmail());
+			Log.d("UsrServ: insereAtt", "email >> Alterado");
 		}
 		
-		if (cliente.getSenha().length() <= 0) {
-			cliente.setSenha(clienteLogado.getSenha());
-			Log.d("UsrServ: insereAtt", "senha >> Ausente");
+		if (cliente.getSenha().length() > 0) {
+			clienteLogado.setSenha(cliente.getSenha());
+			Log.d("UsrServ: insereAtt", "senha >> Alterado");
 		}
 	}
 	
 	/**
+	 * Atualiza os atributos do cliente logado por meio do método atualizarAtributos(arg) e em
+	 * seguida atualiza o cliente no banco de dados.
 	 * 
 	 * @param cliente
 	 * @return
 	 */
 	public static boolean atualizarDados(Cliente cliente) {
-		insereAtributosAusentes(cliente);
+		atualizaAtributos(cliente);
 		
-		if (verificaValidadeCampos(cliente) == 0) {
-			clienteDao.atualizarCliente(cliente);
-			setClienteLogado(cliente);
-			
-			Log.d("UsrServ: cliente:", "priNome: " + cliente.getPrimeiroNome());
-			Log.d("UsrServ: cliente:", "ultNome: " + cliente.getUltimoNome());
-			Log.d("UsrServ: cliente:", "email: " + cliente.getEmail());
-			Log.d("UsrServ: cliente:", "senha: " + cliente.getSenha());
+		clienteDao.atualizarCliente(clienteLogado);
+		
+		Log.d("UsrServ: cliente:", "priNome: " + cliente.getPrimeiroNome());
+		Log.d("UsrServ: cliente:", "ultNome: " + cliente.getUltimoNome());
+		Log.d("UsrServ: cliente:", "email: " + cliente.getEmail());
+		Log.d("UsrServ: cliente:", "senha: " + cliente.getSenha());
 
-			return true;
-		}
-		return false;
+		return true;
 	}
 	
 	/**
-	 * @param cliente
-	 * @return
+	 * APENAS PARA FINALIDADES DE DEPURAÇÃO, RESULTADOS APARECEM IMPRESSOS VIA LOGCAT.
 	 */
-	public static boolean verificaCamposVazios(Cliente cliente) {
-		if (cliente.getPrimeiroNome().length() <= 0) { return true; }
-		if (cliente.getUltimoNome().length() <= 0) { return true; }
-		if (cliente.getEmail().length() <= 0) { return true; }
-		if (cliente.getSenha().length() <= 0) { return true; }
-		
-		return false;
-	}
-	
-	/**
-	 * @param cliente
-	 * @return
-	 */
-	public static int verificaValidadeCampos(Cliente cliente) {
-		int validade = 0;
-		
-		if(verificaCamposVazios(cliente)) { return -1; }
-		
-		return validade;
-	}
-	
 	public static void imprimeTodos() {
 		Log.d("Reading: ", "Reading all contacts.."); 
         List<Cliente> contacts = clienteDao.recuperarTodosClientes();       
          
         for (Cliente cn : contacts) {
             String log = "fN: "+cn.getPrimeiroNome() + " ,lN: " + cn.getUltimoNome() + " ,E: " + cn.getEmail() + ", S: " + cn.getSenha();
-            // Writing Contacts to log
-            Log.d("CL: ", log);
+            
+            Log.d("Cliente: ", log);
         }
 	}
 }

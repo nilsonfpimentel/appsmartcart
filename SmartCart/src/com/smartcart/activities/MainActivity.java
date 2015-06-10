@@ -2,9 +2,9 @@ package com.smartcart.activities;
 
 import com.smartcart.R;
 import com.smartcart.cliente.funcionalidades.UsuarioServicos;
-import com.smartcart.cliente.persistencia.ClienteDAO;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	final Context context = this;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +39,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				Intent intentUpdate = new Intent(MainActivity.this, SigninActivity.class);
 				startActivity(intentUpdate);
-				
-				UsuarioServicos.imprimeTodos();
-				UsuarioServicos.logout();
+				UsuarioServicos.resetLogin();
 				finish();
 			}
 		});
@@ -48,20 +47,16 @@ public class MainActivity extends Activity {
 	}
 	
 	public void onResume() {
-		UsuarioServicos.setDao(new ClienteDAO(this));
-		UsuarioServicos.openDao();
+		UsuarioServicos.setDatabaseContext(context);
 		
 		String accountName = UsuarioServicos.recuperarPrimeiroNome();
-		
 		TextView accountNameTextView = (TextView) findViewById(R.id.main_welcome_user_label);
-		
 		accountNameTextView.setText(getString(R.string.main_welcome_user_text, accountName));
 		
 		super.onResume();
 	}
 	
 	public void onPause() {
-		UsuarioServicos.closeDAO();
 		super.onPause();
 	}
 }

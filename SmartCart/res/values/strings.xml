@@ -18,9 +18,10 @@
 
     <string name="signup_insert_email">Insira seu E-mail</string>
     <string name="signup_insert_password">Sua senha</string>
+    <string name="signup_insert_password_conf">Confirme sua senha</string>
     <string name="signup_insert_first_name">Seu nome</string>
     <string name="signup_insert_last_name">Seu sobrenome</string>
-    <string name="signup_create_account_button">Criar minha conta</string>
+    <string name="signup_create_account_button">Criar conta</string>
 
     <string name="main_welcome_user_text">Bem vindo %1s</string>
     <string name="main_update_client_button">Atualizar dados de cliente</string>
@@ -33,4 +34,12 @@
     <string name="update_insert_last_name">Novo sobrenome</string>
     <string name="update_create_account_button">Atualizar minha conta</string>
     
+    <string name="error_confirm_email_field">Campos senha e confirmação de senha diferem</string>
+    <string name="error_empty_fields">Todos os campos devem ser preenchidos</string>
+    <string name="error_email_not_registered">Conta de E-mail não cadastrada</string>
+    <string name="error_email_already_registered">Conta de E-mail já cadastrada.</string>
+    <string name="error_register_account_fail">Falha na criação de nova conta</string>
+    <string name="error_wrong_email_or_password">E-mail ou senha incorretos</string>
+    
+
 </resources>

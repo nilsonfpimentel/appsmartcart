@@ -1,6 +1,10 @@
 package com.smartcart.cliente.estruturas;
 
 public class Cliente {
+	/**
+	 * Identificação única para o cadastro do cliente no banco de dados, automaticamente setado
+	 * no momento do cadastro.
+	 */
 	private long id;
 	private String primeiroNome;
 	private String ultimoNome;

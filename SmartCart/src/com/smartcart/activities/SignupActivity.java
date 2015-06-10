@@ -3,17 +3,15 @@ package com.smartcart.activities;
 import com.smartcart.R;
 import com.smartcart.cliente.estruturas.Cliente;
 import com.smartcart.cliente.funcionalidades.UsuarioServicos;
-import com.smartcart.cliente.persistencia.ClienteDAO;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class SignupActivity extends Activity {
 	final Context context = this;
@@ -22,18 +20,6 @@ public class SignupActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_signup);
-		
-		/**
-		 * AlertDialog genérico para activity criar conta
-		 */
-		final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-		alertDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {}
-		});
-		alertDialog.setIcon(R.drawable.ic_launcher);
-		alertDialog.setTitle("Falha na criação de nova conta");
-		
-//		UsuarioServicos.setDao( new ClienteDAO(this) );
 		
 		final EditText primeiroNomeInput = (EditText) findViewById(
 				R.id.signup_first_name_input);
@@ -47,6 +33,9 @@ public class SignupActivity extends Activity {
 		final EditText senhaInput = (EditText) findViewById(
 				R.id.signup_password_input);
 		
+		final EditText senhaInputConf = (EditText) findViewById(
+				R.id.signup_password_conf_input);
+		
 		Button signupOkButton = (Button) findViewById(
 				R.id.signup_clickable_create_account_button);
 		
@@ -58,16 +47,24 @@ public class SignupActivity extends Activity {
 				String ultimoNome = ultimoNomeInput.getEditableText().toString();
 				String email = emailInput.getEditableText().toString();
 				String senha = senhaInput.getEditableText().toString();
-				
+				String senhaConfirmacao = senhaInputConf.getEditableText().toString();
+
+				String listaParametros[] = new String[] {primeiroNome, ultimoNome, email,
+						senha, senhaConfirmacao};
+
 				Cliente cliente = preencheCampos(primeiroNome, ultimoNome, email, senha);
-				
-				if (UsuarioServicos.verificaValidadeCampos(cliente) == -1) {
-					alertDialog.setMessage("Todos os campos devem ser preenchidos.");
-					alertDialog.show();
+
+				if (!verificaCamposPreenchidos(listaParametros)) {
+					Toast.makeText(context, getString(R.string.error_empty_fields),
+							Toast.LENGTH_SHORT).show();
 				}
 				else if(UsuarioServicos.checaEmailCadastrado(email)) {
-					alertDialog.setMessage("Conta de E-mail já cadastrada.");
-					alertDialog.show();
+					Toast.makeText(context, getString(R.string.error_email_already_registered),
+							Toast.LENGTH_SHORT).show();
+				}
+				else if(!senha.equals(senhaConfirmacao)) {
+					Toast.makeText(context, getString(R.string.error_confirm_email_field),
+							Toast.LENGTH_LONG).show();
 				}
 				else {
 					UsuarioServicos.cadastrarCliente(cliente);
@@ -83,14 +80,21 @@ public class SignupActivity extends Activity {
 		return cliente;
 	}
 	
+	private boolean verificaCamposPreenchidos(String[] parametros) {
+		for (String param : parametros) {
+			if (param.length() <= 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public void onResume() {
-		UsuarioServicos.setDao(new ClienteDAO(this));
-		UsuarioServicos.openDao();
+		UsuarioServicos.setDatabaseContext(context);
 		super.onResume();
 	}
 	
 	public void onPause() {
-		UsuarioServicos.closeDAO();
 		super.onPause();
 	}
 }

@@ -2,12 +2,9 @@ package com.smartcart.activities;
 
 import com.smartcart.R;
 import com.smartcart.cliente.funcionalidades.UsuarioServicos;
-import com.smartcart.cliente.persistencia.ClienteDAO;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SigninActivity extends Activity {
 	final Context context = this;
@@ -26,8 +24,7 @@ public class SigninActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_signin);
 		
-		UsuarioServicos.setDao( new ClienteDAO(this) );
-		UsuarioServicos.openDao();
+		UsuarioServicos.resetLogin();
 		
 		final EditText emailEditText = (EditText) findViewById(
 				R.id.signin_email_input);
@@ -44,25 +41,22 @@ public class SigninActivity extends Activity {
 				
 				String email = emailEditText.getEditableText().toString();
 				String senha = senhaEditText.getEditableText().toString();
-				
-				boolean loginFlag = UsuarioServicos.login(email, senha);
-				
-				if (loginFlag == false){
-					AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-					alertDialog.setTitle("E-mail ou senha incorretos");
-					alertDialog.setMessage("Verifique os dados de sua conta");
-					alertDialog.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) {}
-					});
-					
-					alertDialog.setIcon(R.drawable.ic_launcher);
-					alertDialog.show();
+
+				if (!verificaCamposPreenchidos( new String[]{email, senha} )) {
+					Toast.makeText(context, getString(R.string.error_empty_fields),
+							Toast.LENGTH_SHORT).show();
+				}
+				else if (!UsuarioServicos.checaEmailCadastrado(email)) {
+					Toast.makeText(context, getString(R.string.error_email_not_registered),
+							Toast.LENGTH_LONG).show();
+				}
+				else if (!UsuarioServicos.login(email, senha)) {
+					Toast.makeText(context, getString(R.string.error_wrong_email_or_password),
+							Toast.LENGTH_SHORT).show();
 				}
 				else{
 					Intent intentMain = new Intent(SigninActivity.this,
 							MainActivity.class);
-					
-//					intentMain.putExtra("email", cliente.getPrimeiroNome());
 					
 					startActivity(intentMain);
 					finish();
@@ -71,8 +65,7 @@ public class SigninActivity extends Activity {
 		});
 		
 		//SignUP activity -> clicar texto "criar conta"
-		TextView signinCreateAccount = (TextView) findViewById(
-				R.id.signin_clickable_signup);
+		TextView signinCreateAccount = (TextView) findViewById(R.id.signin_clickable_signup);
 		signinCreateAccount.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -86,13 +79,11 @@ public class SigninActivity extends Activity {
 	}
 	
 	public void onResume() {
-		UsuarioServicos.setDao(new ClienteDAO(this));
-		UsuarioServicos.openDao();
+		UsuarioServicos.setDatabaseContext(context);
 		super.onResume();
 	}
 	
 	public void onPause() {
-		UsuarioServicos.closeDAO();
 		super.onPause();
 	}
 
@@ -113,5 +104,14 @@ public class SigninActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private boolean verificaCamposPreenchidos(String[] parametros) {
+		for (String param : parametros) {
+			if (param.length() <= 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
